@@ -55,3 +55,5 @@ select top 5 with ties  FIRST_NAME,LAST_NAME,SALARY from trainees order by SALAR
 select * from trainees order by DEPARTMENT desc
 --like(last name 3rd letter will be a)
 select * from trainees where LAST_NAME like '__a%'
+
+
