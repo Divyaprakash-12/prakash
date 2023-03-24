@@ -22,6 +22,7 @@ DECLARE @percentage FLOAT
 SET @percentage=(@x*100.0)/@y
 RETURN @percentage
 END
+
 select student_id,student_name,
 semester,securedmarks,totalmarks,dbo.fn_percentage(securedmarks,totalmarks)
 as percentage from student
@@ -75,3 +76,31 @@ select count(student_id ) as number_of_students from student
 /*6.Show the working of Merge Statement by creating a backup for the students details of only students in Sem 1.
 Note: Update few values in students details so that you can see the working of UPDATE.*/
 
+select * into sem1backup from student where semester='1 sem';
+
+select * from sem1backup
+select * from student
+
+insert into student values('bala','1 sem',490,500),('pandi','1 sem',410,500),
+('sakthi','1 sem',390,500
+
+
+update student set student_name='arun kumar' where student_id=1
+update student set securedmarks=450 where student_id=6
+
+merge sem1backup as s1 using student as s on (s1.student_id=s.student_id) 
+when matched
+then update set
+s1.student_id=s.student_id,
+s1.student_name=s.student_name,
+s1.semester=s.semester,
+s1.securedmarks=s.securedmarks,
+s1.totalmarks=s.totalmarks
+when not matched
+then insert (student_id,student_name,semester,securedmarks,totalmarks)
+values(s.student_id,s.student_name,s.semester,s.securedmarks,s.totalmarks)
+when not matched by source
+then delete ;
+
+select * from sem1backup
+select * from student
