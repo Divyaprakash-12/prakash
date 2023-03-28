@@ -41,9 +41,10 @@ unpivot
 --------------------------------------------------------------------------------------------
 
 --2.
+--create book table
 create table book(
 book_id int primary key,book_name varchar(40),author_name varchar(20),release_date date)
-
+--insert values
 insert into book values
 (101,'wings of fire','vignesh','2000-04-12')
 insert into book values
@@ -54,9 +55,11 @@ insert into book values
 
 select * from book
 
+--creaate department table
 create table dept(
 dept_id int primary key,dept_name varchar(25))
 
+--insert values
 insert into dept values
 (201,'BSC-IT'),
 (202,'BSC-CS'),
@@ -67,13 +70,11 @@ insert into dept values
 (207,'BA-ENGLISH'),
 (208,'BA-TAMIL');
 
-select * from dept
-select * from book
-select * from student
-
+--create student table
 create table student
 (student_id int primary key,student_name varchar(30))
 
+--insert values
 insert into student values
 (1,'hari'),
 (2,'prakash'),
@@ -84,6 +85,7 @@ insert into student values
 (7,'bharath'),
 (8,'bhavan')
 
+--create library table
 create table library(stu_id int references student(student_id),dept_id int references dept(dept_id),
 book_id int references book(book_id),borrow_date date)
 
@@ -95,14 +97,27 @@ insert into library values
 (5,205,105,'2023-03-28'),
 (6,206,101,'2023-03-15'),
 (7,207,102,'2023-03-17'),
-(8,208,103,'2023-03-22'),
-(5,205,104,'2023-03-19'),
-(4,204,103,'2023-03-06'),
-(3,203,102,'2023-03-20'),
-(2,202,101,'2023-03-22'),
-(1,201,105,'2023-03-18'),
-(6,206,104,'2023-03-21'),
-(7,207,103,'2023-03-28'),
-(8,208,102,'2023-03-25')
+(8,208,103,'2023-03-22')
 
 select * from library
+
+--drop constraint (foreign key for book_id column)
+alter table library drop constraint FK__library__book_id__15502E78
+--droop book_id column
+alter table library drop column book_id
+--add book_id column with constraint
+alter table library add book_id int default 103 constraint fk_library_book_id foreign key (book_id)
+references book(book_id) on delete cascade on update set default;
+
+--update values in library table
+update library set book_id=101 where stu_id=1 or stu_id=8
+update library set book_id=102 where stu_id=2 or stu_id=7
+update library set book_id=103 where stu_id=3 or stu_id=6
+update library set book_id=104 where stu_id=4 
+update library set book_id=105 where stu_id=5 
+
+select * from book
+select * from library
+
+--update values in book table
+update book set book_id=108 where book_id=104
