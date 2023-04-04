@@ -1,9 +1,9 @@
 select * from students
 
---implicit transaction
+--2.implicit transaction
 set implicit_transactions on
 update students set year_of_completion=2022 where stu_id=1
-select iif(@@OPTIONS &2=2,
+select iif(@@OPTIONS &2=2, --check implicit mode is turend on or off
 'implicit transaction mode on',
 'implicit transaction mode off')as 'transaction mode'
 select @@TRANCOUNT as count_transaction
@@ -26,7 +26,7 @@ select @@TRANCOUNT as count_transaction
 commit tran
 select @@TRANCOUNT as count_transaction*/
 -----------------------------------------------------------------
---only commit-insert statement
+--3.(a)only commit-insert statement
 select * from students
 begin tran
 insert into students values(21,'murugan','Bsc-it',2022)
@@ -35,14 +35,14 @@ commit
 select @@TRANCOUNT as transaction_count
 select * from students
 -----------------------------------------------------
---only rollback-update statement
+--3.(b)only rollback-update statement
 begin tran
 update students set stu_name='Bala murugan' where stu_id=21
 select * from students where stu_id=21
 rollback tran
 select * from students where stu_id=21
 ---------------------------------
---savepoint
+--3.(c)savepoint
 select * from students
 begin tran
 insert into students values(22,'venkatesh','Bsc-cs',2024)
@@ -54,18 +54,11 @@ rollback tran insertstatement
 commit tran 
 select * from students
 ----------------------------------------------------
---auto rollback
-begin tran
+--1.auto commit
 insert into students values(23,'sasi','Bsc-it',2024)
-update students set stu_name='ajith kumar' where stu_id=17
-select * from students
-commit tran
-select * from students
 
 -------------------------------------------------------
---auto commit
-set auto commit on
-begin tran
-update students set stu_name='ajith' where stu_id=17
+--1.auto rollback
+insert into students values(23,'sasi','Bsc-it',2024)
 
-select * from students
+----------------------------------------------------------
